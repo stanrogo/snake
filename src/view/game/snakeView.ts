@@ -1,5 +1,5 @@
-import BaseView from './baseView';
-import SnakePart from '../model/entity/snakePart';
+import BaseView from '../baseView';
+import SnakePart from '../../model/entity/snakePart';
 
 class SnakeView extends BaseView {
     snakeParts: SnakePart[];

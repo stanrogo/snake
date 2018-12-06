@@ -1,5 +1,5 @@
-import Food from '../model/entity/food';
-import BaseView from './baseView';
+import Food from '../../model/entity/food';
+import BaseView from '../baseView';
 
 class FoodView extends BaseView {
     food: Food;

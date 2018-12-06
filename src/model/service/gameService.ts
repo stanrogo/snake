@@ -1,38 +1,26 @@
 import FoodLogic from '../logic/foodLogic';
 import SnakeLogic from '../logic/snakeLogic';
-import ScoreLogic from '../logic/scoreLogic';
 import Food from '../entity/food';
 import Snake from '../entity/snake';
-import Score from '../entity/score';
-import Toolbar from '../entity/toolbar'
-import StartButton from '../entity/startButton';
-import CanvasArea from '../../interfaces/canvasArea';
+import CanvasArea from '../entity/canvasArea';
 
 class GameService {
-
-    gameArea: CanvasArea;
-    cubeSize: number;
+    private readonly gameArea: CanvasArea;
+    private readonly cubeSize: number;
 
     public food: Food;
     public snake: Snake;
-    public score: Score;
-    public toolbar: Toolbar;
-    public startButton: StartButton;
 
     constructor(gameArea: CanvasArea, cubeSize: number) {
         this.gameArea = gameArea;
         this.cubeSize = cubeSize;
         this.food = FoodLogic.getFood(this.gameArea, this.cubeSize);
         this.snake = SnakeLogic.genSnake(this.cubeSize);
-        this.score = ScoreLogic.newScore();
-        this.toolbar = new Toolbar();
-        this.startButton = new StartButton();
     }
 
     public reset() {
         this.genFood();
         SnakeLogic.resetSnake(this.snake);
-        ScoreLogic.resetScore(this.score);
     }
 
     public moveSnake(reverse: boolean = false): void {
@@ -62,18 +50,6 @@ class GameService {
         const food = FoodLogic.getFood(this.gameArea, this.cubeSize);
         this.food.x = food.x;
         this.food.y = food.y;
-    }
-
-    public updateScore(): void {
-        ScoreLogic.updateScore(this.score);
-    }
-
-    public setToolbarProps(x: number, y: number, height: number, width: number): void {
-        this.toolbar.setProps(x, y, height, width);
-    }
-
-    public setStartButtonProps(data: CanvasArea): void {
-        this.startButton.setProps(data);
     }
 }
 

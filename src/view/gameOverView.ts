@@ -1,4 +1,4 @@
-import BaseView from "./baseView";
+import BaseView from './baseView';
 
 class GameOverView extends BaseView {
 
@@ -6,7 +6,7 @@ class GameOverView extends BaseView {
         super(ctx);
     }
 
-    update() {
+    update(): void {
         this.drawText({
             color: 'red',
             align: 'center',

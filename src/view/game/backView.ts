@@ -1,4 +1,4 @@
-import BaseView from "./baseView";
+import BaseView from "../baseView";
 
 class BackView extends BaseView {
 

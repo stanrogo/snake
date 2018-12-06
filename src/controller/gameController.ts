@@ -1,78 +1,44 @@
+import CanvasArea from '../model/entity/canvasArea';
 import GameService from '../model/service/gameService';
-import FoodView from '../view/foodView';
-import SnakeView from '../view/snakeView';
-import BackView from '../view/backView';
-import GameOverView from '../view/gameOverView';
-import ToolbarController from './toolbarController';
-import CanvasArea from '../interfaces/canvasArea';
+import GameView from '../view/game/gameView';
 
 class GameController {
+    private static readonly cubeSize: number = 10;
+
+    private readonly ctx: CanvasRenderingContext2D;
+    private readonly area: CanvasArea;
+
     private readonly gameService: GameService;
+    private readonly gameView: GameView;
 
-    private toolbarController: ToolbarController;
+    private foodSubscribers: (() => void)[];
+    private gameOverSubscribers: (() => void)[];
 
-    private backView: BackView;
-    private foodView: FoodView;
-    private snakeView: SnakeView;
-    private gameOverView: GameOverView;
-
-    private interval: number;
-    private readonly keyDown: () => void;
-
-    private readonly toolbarHeight: number = 30;
-
-    constructor(ctx: CanvasRenderingContext2D) {
-        this.keyDown = this.notifyKeyDown.bind(this);
-        this.interval = 0;
-        const gameArea: CanvasArea = {
-          x: 0, width: ctx.canvas.width, y: this.toolbarHeight, height: ctx.canvas.height - this.toolbarHeight
-        };
+    constructor(ctx: CanvasRenderingContext2D, area: CanvasArea) {
+        this.ctx = ctx;
+        this.area = area;
 
         // Initialise services
-        this.gameService = new GameService(gameArea, 10);
+        this.gameService = new GameService(area, GameController.cubeSize);
 
         // Initialise views
-        this.backView = new BackView(ctx);
-        this.foodView = new FoodView(ctx, this.gameService.food);
-        this.snakeView = new SnakeView(ctx, this.gameService.snake.parts);
-        this.gameOverView = new GameOverView(ctx);
+        this.gameView = new GameView(ctx, this.gameService.food,this.gameService.snake.parts);
 
-        // Initialise controllers
-        this.toolbarController = new ToolbarController(ctx, this.gameService, this.toolbarHeight);
-        this.toolbarController.onStart(this.start.bind(this));
+        // Initialise Subscribers
+        this.foodSubscribers = [];
+        this.gameOverSubscribers = [];
 
-        this.backView.update();
-        this.toolbarController.tick();
+        document.addEventListener('keydown', this.notifyKeyDown.bind(this));
     }
 
-    public start(): void {
-        this.stop();
-        this.gameService.reset();
-        document.addEventListener('keydown', this.keyDown);
-        this.interval = window.setInterval(this.tick.bind(this), 100);
-    }
-
-    public stop(): void {
-        document.removeEventListener('keydown', this.keyDown);
-        window.clearInterval(this.interval);
-    }
-
-    private update(): void {
-        this.backView.update();
-        this.toolbarController.tick();
-        this.foodView.update();
-        this.snakeView.update();
-    }
-
-    private tick(): void {
+    public tick(): void {
         this.gameService.moveSnake();
 
         const hasCollision: boolean = this.gameService.checkCollision();
         if (hasCollision) {
             this.gameService.moveSnake(true);
-            this.update();
-            this.gameOverView.update();
-            this.stop();
+            this.gameView.update();
+            this.gameOverSubscribers.forEach(x => x());
             return;
         }
 
@@ -80,14 +46,26 @@ class GameController {
         if (inFood) {
             this.gameService.growSnake();
             this.gameService.genFood();
-            this.gameService.updateScore();
+            this.foodSubscribers.forEach(x => x());
         }
 
-        this.update();
+        this.gameView.update();
+    }
+
+    public reset(): void {
+        this.gameService.reset();
     }
 
     private notifyKeyDown(event: KeyboardEvent): void {
         this.gameService.turnSnake(event.keyCode);
+    }
+
+    public onFood(callback: () => void): void {
+        this.foodSubscribers.push(callback);
+    }
+
+    public onGameOver(callback: () => void): void {
+        this.gameOverSubscribers.push(callback);
     }
 }
 

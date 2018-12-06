@@ -1,14 +1,13 @@
 import BaseView from '../baseView';
-import Toolbar from '../../model/entity/toolbar';
 import Score from '../../model/entity/score';
-import StartButton from '../../model/entity/startButton';
+import CanvasArea from '../../model/entity/canvasArea';
 
 class ToolbarView extends BaseView {
-    private toolbar: Toolbar;
-    private startButton: StartButton;
+    private toolbar: CanvasArea;
+    private startButton: CanvasArea;
     private score: Score;
 
-    constructor(ctx: CanvasRenderingContext2D, toolbar: Toolbar, score: Score, startButton: StartButton) {
+    constructor(ctx: CanvasRenderingContext2D, toolbar: CanvasArea, score: Score, startButton: CanvasArea) {
         super(ctx);
         this.toolbar = toolbar;
         this.startButton = startButton;

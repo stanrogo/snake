@@ -1,5 +1,5 @@
 import Food from '../entity/food';
-import CanvasArea from '../../interfaces/canvasArea';
+import CanvasArea from '../entity/canvasArea';
 
 class FoodLogic {
 

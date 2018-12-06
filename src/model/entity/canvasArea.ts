@@ -1,10 +1,10 @@
-class Toolbar {
+class CanvasArea {
     x: number = 0;
     y: number = 0;
     height: number = 0;
     width: number = 0;
 
-    setProps(x: number, y: number, height: number, width: number) {
+    constructor(x: number, y: number, height: number, width: number) {
         this.x = x;
         this.y = y;
         this.height = height;
@@ -12,4 +12,4 @@ class Toolbar {
     }
 }
 
-export default Toolbar;
+export default CanvasArea;
