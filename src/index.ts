@@ -1,4 +1,4 @@
-import Controller from './controller/controller';
+import Controller from './game/controller/controller';
 
 const canvas: HTMLCanvasElement | null = <HTMLCanvasElement|null>document.getElementById('canvas');
 if (!canvas) throw new ReferenceError('Cannot find canvas');

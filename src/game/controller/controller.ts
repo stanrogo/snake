@@ -22,7 +22,7 @@ class Controller {
     private gameOverView: GameOverView;
 
     private interval: number;
-    private gameOver: boolean;
+    private paused: boolean;
 
     constructor(ctx: CanvasRenderingContext2D) {
         this.ctx = ctx;
@@ -40,14 +40,14 @@ class Controller {
         // Bind controller events
         this.toolbarController.onStart(() => this.start());
         this.gameController.onFood(() => this.toolbarController.updateScore());
-        this.gameController.onGameOver(() => this.stop());
+        this.gameController.onGameOver(() => this.endGame());
 
         // Initialise views
         this.gameOverView = new GameOverView(ctx);
 
         // Initialise other properties
         this.interval = 0;
-        this.gameOver = true;
+        this.paused = true;
         ctx.canvas.width = Controller.canvasWidth;
         ctx.canvas.height = Controller.canvasHeight;
     }
@@ -58,21 +58,24 @@ class Controller {
     }
 
     private start(): void {
-        if (!this.gameOver) {
-            this.stop();
+        this.stop();
+
+        if (!this.paused) {
             this.toolbarController.reset();
             this.gameController.reset();
         }
 
-        this.gameOver = false;
-        this.interval = window.setInterval(() => this.update(), 100);
+        this.interval = window.setInterval(() => this.update(), 50);
+        this.paused = false;
     }
 
     private stop(): void {
-        this.gameOver = true;
-        this.gameOverView.update();
-        this.gameOver = false;
         window.clearInterval(this.interval);
+    }
+
+    private endGame(): void {
+        this.gameOverView.update();
+        this.stop();
     }
 }
 
