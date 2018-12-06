@@ -17,6 +17,6 @@ script:
 deploy:
   provider: script
   skip_cleanup: true
-  script: rsync -r --delete -q $TRAVIS_BUILD_DIR/dist/ stanrogo@ssh.stanrogo.com:/home/stanrogo/public_html/snake.stanrogo.com
+  script: rsync -r --delete -q $TRAVIS_BUILD_DIR/ stanrogo@ssh.stanrogo.com:/home/stanrogo/public_html/snake.stanrogo.com
   on:
     branch: master

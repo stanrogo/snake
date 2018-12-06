@@ -1,4 +1,4 @@
-import Cube from './Cube';
+import Cube from './cube';
 
 class Food extends Cube {
     static color: string = '#212121';

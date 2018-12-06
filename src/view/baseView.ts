@@ -1,4 +1,4 @@
-import Cube from '../model/entity/Cube';
+import Cube from '../model/entity/cube';
 import { CanvasText, CanvasRect } from '../interfaces/canvas';
 
 abstract class BaseView {
